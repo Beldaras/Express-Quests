@@ -29,4 +29,19 @@ const getUserById = (req, res) => {
         res.status(500).send("Error retrieving this movie from database");
       })
 }
-module.exports = { getUsers, getUserById};
+
+const postUSer = (req, res) => {
+      const {firstname, lastname, email, ciy, lanquage}=req.body;
+
+      database
+        .query("INSERT INTO users (firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
+          [firstname, lastname, email, ciy, lanquage])
+        .then (([result]) => {
+          res.location("/api/user/${result.insertId}").sendStatus(201);
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500).send("Error saving the user");
+        })
+}
+module.exports = { getUsers, getUserById, postUSer};
